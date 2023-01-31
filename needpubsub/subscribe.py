@@ -60,10 +60,9 @@ def subscribe_message_async(subscription_id: str, callback_fn: Callable, timeout
         
         if message.attributes:
             rec_data.update(**message.attributes)
-        
-        callback_fn(**rec_data)
-        
+            
         message.ack()
+        callback_fn(**rec_data)
         
     subscriber = pubsub_v1.SubscriberClient()
     subscription_path = subscriber.subscription_path(PROJECT_ID, subscription_id)

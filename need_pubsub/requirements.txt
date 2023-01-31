@@ -1,3 +1,0 @@
-# Message
-google-cloud-pubsub
-rsa==4.9

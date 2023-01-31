@@ -12,19 +12,16 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/CMU-studio-project/need-pubsub",
-    project_urls={
-        "Bug Tracker": "https://github.com/CMU-studio-project/need-pubsub/issues",
-    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "need_pubsub"},
-    packages=setuptools.find_packages(where="need_pubsub"),
+    packages=setuptools.find_packages(),
     python_requires=">=3.6",
     install_requires=[
         "google-cloud-pubsub",
         "rsa~=4.9"
-    ]
+    ],
+    # py_modules=["need_pubsub/publish", "need_pubsub/subscribe"]
 )
