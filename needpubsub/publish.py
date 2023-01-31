@@ -3,9 +3,7 @@ from google.cloud import pubsub_v1
 
 from .utils import encrypt_message
 
-PROJECT_ID = os.environ["NEED_PROJECT_ID"]
-
-def publish_message(message: bytes, topic_id: str, **kwargs) -> str:  # type: ignore[no-untyped-def]
+def publish_message(message: bytes, project_id: str, topic_id: str, **kwargs) -> str:  # type: ignore[no-untyped-def]
     if kwargs.get("ordering_key", ""):
         publisher_options = pubsub_v1.types.PublisherOptions(enable_message_ordering=True)
         # Sending messages to the same region ensures they are received in order
@@ -16,7 +14,7 @@ def publish_message(message: bytes, topic_id: str, **kwargs) -> str:  # type: ig
         )
     else:
         publisher = pubsub_v1.PublisherClient()
-    topic_path = publisher.topic_path(PROJECT_ID, topic_id)
+    topic_path = publisher.topic_path(project_id, topic_id)
 
     # Message encryption
     encrypted_message = encrypt_message(message)

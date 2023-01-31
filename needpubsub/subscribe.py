@@ -1,4 +1,3 @@
-import os
 from concurrent.futures import TimeoutError  # pylint: disable=redefined-builtin
 from typing import Callable, Optional
 
@@ -8,12 +7,9 @@ from google.cloud.pubsub_v1.subscriber import message as sub_message
 from .utils import decrypt_message
 
 
-PROJECT_ID = os.environ["NEED_PROJECT_ID"]
-
-
-def subscribe_message_sync(subscription_id: str, callback_fn: Callable) -> None:
+def subscribe_message_sync(project_id: str, subscription_id: str, callback_fn: Callable) -> None:
     subscriber = pubsub_v1.SubscriberClient()
-    subscription_path = subscriber.subscription_path(PROJECT_ID, subscription_id)
+    subscription_path = subscriber.subscription_path(project_id, subscription_id)
 
     # The subscriber pulls a specific number of messages. The actual
     # number of messages pulled may be smaller than max_messages.
@@ -48,7 +44,7 @@ def subscribe_message_sync(subscription_id: str, callback_fn: Callable) -> None:
     callback_fn(**rec_data)
 
 
-def subscribe_message_async(subscription_id: str, callback_fn: Callable, timeout: Optional[float] = None) -> None:
+def subscribe_message_async(project_id: str, subscription_id: str, callback_fn: Callable, timeout: Optional[float] = None) -> None:
     def sub_callback(message: sub_message.Message) -> None:
         message_data = message.data
         decrypted_message = decrypt_message(message_data)
@@ -65,7 +61,7 @@ def subscribe_message_async(subscription_id: str, callback_fn: Callable, timeout
         callback_fn(**rec_data)
         
     subscriber = pubsub_v1.SubscriberClient()
-    subscription_path = subscriber.subscription_path(PROJECT_ID, subscription_id)
+    subscription_path = subscriber.subscription_path(project_id, subscription_id)
 
     streaming_pull_future = subscriber.subscribe(subscription_path, callback=sub_callback)
     print(f"Listening for messages on {subscription_path}..")
