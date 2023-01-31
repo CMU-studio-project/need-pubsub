@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="need-pubsub",
-    version="0.0.1",
+    version="0.0.2",
     author="Kyumin Park",
     author_email="kyuminpa@andrew.cmu.edu",
     description="Google Pub/Sub wrapper with encryption",
@@ -20,8 +20,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     python_requires=">=3.6",
     install_requires=[
-        "google-cloud-pubsub",
-        "rsa~=4.9"
+        "google-cloud-pubsub"
     ],
     # py_modules=["need_pubsub/publish", "need_pubsub/subscribe"]
 )
