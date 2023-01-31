@@ -1,7 +1,5 @@
-import os
 from google.cloud import pubsub_v1
 
-from .utils import encrypt_message
 
 def publish_message(message: bytes, project_id: str, topic_id: str, **kwargs) -> str:  # type: ignore[no-untyped-def]
     if kwargs.get("ordering_key", ""):
@@ -16,10 +14,7 @@ def publish_message(message: bytes, project_id: str, topic_id: str, **kwargs) ->
         publisher = pubsub_v1.PublisherClient()
     topic_path = publisher.topic_path(project_id, topic_id)
 
-    # Message encryption
-    encrypted_message = encrypt_message(message)
-
-    future = publisher.publish(topic=topic_path, data=encrypted_message, **kwargs)
+    future = publisher.publish(topic=topic_path, data=message, **kwargs)
     message_id = future.result()
     
     return message_id

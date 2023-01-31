@@ -4,8 +4,6 @@ from typing import Callable, Optional
 from google.cloud import pubsub_v1
 from google.cloud.pubsub_v1.subscriber import message as sub_message
 
-from .utils import decrypt_message
-
 
 def subscribe_message_sync(project_id: str, subscription_id: str, callback_fn: Callable) -> None:
     subscriber = pubsub_v1.SubscriberClient()
@@ -31,10 +29,9 @@ def subscribe_message_sync(project_id: str, subscription_id: str, callback_fn: C
     
     message = response.received_messages[0].message
     message_data = message.data
-    decrypted_message = decrypt_message(message_data)
 
     rec_data = {
-        "message": decrypted_message,
+        "message": message_data,
         "message_id": message.message_id,
     }
 
@@ -47,10 +44,9 @@ def subscribe_message_sync(project_id: str, subscription_id: str, callback_fn: C
 def subscribe_message_async(project_id: str, subscription_id: str, callback_fn: Callable, timeout: Optional[float] = None) -> None:
     def sub_callback(message: sub_message.Message) -> None:
         message_data = message.data
-        decrypted_message = decrypt_message(message_data)
         
         rec_data = {
-            "message": decrypted_message,
+            "message": message_data,
             "message_id": message.message_id,
         }
         
